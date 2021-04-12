@@ -18,7 +18,7 @@ module.exports = {
         .setDescription(
           `The prefix of the bot on this server is \`${prefix}\` For more information about a specific command, try: \`cr!help (command).`
         )
-        .addField('⚙️ General — 1', '```help, ping```', true)
+        .addField('⚙️ General — 2', '```help, ping, invite```', true)
         .addField('🛠️ Settings — 0', '``` ```', true)
         .addField('💰 Currency — 0', '``` ```', true)
         .setFooter(
