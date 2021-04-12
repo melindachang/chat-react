@@ -1,8 +1,10 @@
-const { owners } = require('./../config.js');
+const { owners, prefix } = require('./../config.js');
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
   name: 'reload',
   description: 'Reloads a command',
+	category: 'Developer',
   aliases: ['rl'],
   args: true,
   execute(client, message, args) {
@@ -14,10 +16,16 @@ module.exports = {
       message.client.commands.find((cmd) => cmd.aliases && cmd.aliases.includes(commandName));
 
     if (!command) {
-      return message.channel.send(
-        `There is no command with name or alias \`${commandName}\`, ${message.author}!`
-      );
+      const embed = new MessageEmbed()
+        .setColor('#f5386a')
+        .setTitle('Query Error')
+        .setDescription('Could not locate the specified command.')
+
+      return message.channel.send(embed).then((msg) => {
+        msg.delete({ timeout: 15000 });
+      });
     }
+
 
     delete require.cache[require.resolve(`./${command.name}.js`)];
 

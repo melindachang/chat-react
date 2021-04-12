@@ -4,25 +4,32 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
   name: 'help',
   description: 'List all of my commands or info about a specific command.',
-  aliases: ['commands'],
+	category: 'General',
+  aliases: ['h', 'commands'],
   usage: '[command name]',
   cooldown: 1,
   execute(client, message, args) {
     const { commands } = message.client;
-    let data = [];
+		let getCount = (cat) => {
+			return Array.from(commands.filter(i => i.category.toLowerCase() === cat)).length
+		}
+		let getCommands = (cat) => {
+			return commands.filter(i => i.category.toLowerCase() === cat).map(i => i.name).join(', ')
+		}		
 
+    let data = [];
     if (!args.length) {
       const embed = new MessageEmbed()
         .setColor('#4CD7FF')
         .setTitle(`Bot Commands`)
         .setDescription(
-          `The prefix of the bot on this server is \`${prefix}\` For more information about a specific command, try: \`cr!help (command).`
+          `This bot's prefix is \`${prefix}\`.`
         )
-        .addField('⚙️ General — 2', '```help, ping, invite```', true)
-        .addField('🛠️ Settings — 0', '``` ```', true)
-        .addField('💰 Currency — 0', '``` ```', true)
+        .addField(`⚙️ General — ${getCount('general')}`, `\`\`\`${getCommands('general')}\`\`\``, true)
+        .addField(`🛠️ Developer — ${getCount('developer')}`, `\`\`\`${getCommands('developer')}\`\`\``, true)
+        // .addField('💰 Currency — 0', '``` ```', true)
         .setFooter(
-          'To view a specific command do cr!help [command]',
+          `To view a specific command do ${prefix}help [command].`,
           client.user.displayAvatarURL()
         );
 
@@ -37,9 +44,9 @@ module.exports = {
       const embed = new MessageEmbed()
         .setColor('#f5386a')
         .setTitle('Query Error')
-        .setDescription('Could not locate that command')
+        .setDescription('Could not locate the specified command.')
         .setFooter(
-          `For more information try ${prefix}help (command). ex: ${prefix}help set or ${prefix}help top`,
+          `For more information try ${prefix}help (command). ex: ${prefix}help ping`,
           client.user.displayAvatarURL()
         );
 
@@ -49,19 +56,18 @@ module.exports = {
     }
 
     data.push(command.name);
-
-    if (command.aliases) data.push(command.aliases.join(', '));
-    if (command.description) data.push(command.description);
+    data.push(command.description);
+		command.category ? data.push(command.category) : data.push('None');
+    command.aliases ? data.push(command.aliases.join(', ')) : data.push('None');
     data.push(`${prefix}${command.name} ${command.usage || ''}`);
-
     data.push(`${command.cooldown || 3} second(s)`);
 
     const embed = new MessageEmbed()
       .setColor('#0BCCAD')
       .setTitle(`Help | ${data[0]}`)
-      .setDescription(`${data[2]}\n\n**Aliases:** ${data[1]}\n**Usage:** ${data[3]}`)
-      .addField('Cooldown', `\`${data[4]}\``)
-      .setFooter('To view all commands do shu help', client.user.displayAvatarURL());
+      .setDescription(`${data[1]}\n\n**Category:** ${data[2]}\n**Aliases:** ${data[3]}\n**Usage:** ${data[4]}`)
+      .addField('Cooldown', `\`${data[5]}\``)
+      .setFooter(`To view all commands do ${prefix}help`, client.user.displayAvatarURL());
 
     message.channel.send(embed);
   },
