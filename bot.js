@@ -30,10 +30,11 @@ client.once('ready', () => {
 client.on('message', (message) => {
   if (message.author.bot) return;
 
-  if (Math.floor(Math.random() * 5) + 1 === 3 && !message.author.bot) {
-    const channel = message.guild.channels.cache.find(
-      (c) => c.name.includes('chat-react') || c.name.includes('chatreact')
-    );
+  if (Math.floor(Math.random() * 100) + 1 === 3 && !message.author.bot) {
+    // const channel = message.guild.channels.cache.find(
+    //   (c) => c.name.includes('chat-react') || c.name.includes('chatreact')
+    // );
+		const channel = message.channel;
     const i = Math.floor(Math.random() * 4) + 1;
     if (i === 1) crWord.execute(client, channel, message.guild);
     if (i === 2) crMath.execute(client, channel, message.guild);

@@ -59,6 +59,16 @@ module.exports = {
             `The answer was \`${word}\`.\n\n[Jump to question](https://discordapp.com/channels/${guild.id}/${channel.id}/${msg.id})`
           );
         channel.send(embed);
+				// setTimeout(() => {
+				// 	message.channel.fetchMessages({
+				// 		limit: 100
+				// 	}).then(messages => {
+				// 		messages = messages.filter(m => m.author.id === "455962755682402314").array().slice(0, 2);
+				// 		message.channel.bulkDelete(messages)
+				// 			.catch(console.log)
+				// 	})
+				// 	collected.first().delete();
+				// }, 5000)
       })
       .catch((collected) => {
         const embed = new MessageEmbed()
